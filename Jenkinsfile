@@ -66,7 +66,7 @@ pipeline {
 //This is used to show test trends and results in Jenkins UI
     post {
         always {
-                junit 'test-results/junit.xml'
+                junit 'jest-results/junit.xml'
                }
         }
 
