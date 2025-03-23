@@ -29,11 +29,12 @@ pipeline {
             }
             steps {
                 sh '''
+                echo 'TEST STAGE'
                 echo 'Testing the Jenkins to perform Assignment...'
                    
                     cd public
                     ls -la
-                    test -f public/index.html && echo "index.html found" || echo "index.html not found"
+                    test -f build/index.html && echo "index.html found" || echo "index.html not found"
                     npm test
 
                 '''
