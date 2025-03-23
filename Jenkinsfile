@@ -20,5 +20,24 @@ pipeline {
                 '''
             }
         }
+         stage('Test') {
+            agent {
+                docker {
+                    image 'node:18-alpine'
+                    reuseNode true
+                }
+            }
+            steps {
+                sh '''
+                echo 'Testing the Jenkins to perform Assignment...'
+                   
+                    cd C:\Users\mazlu\learn-jenkins-app\public
+                    ls -la
+                    grep "index.html" build/C:\Users\mazlu\learn-jenkins-app\public
+                    npm test
+
+                '''
+            }
+        }
     }
 }
