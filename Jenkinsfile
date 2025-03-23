@@ -33,7 +33,7 @@ pipeline {
                    
                     cd public
                     ls -la
-                    grep "index.html" LEARN-JENKINS-APP/public || echo "index.html not found"
+                    test -f public/index.html && echo "index.html found" || echo "index.html not found"
                     npm test
 
                 '''
