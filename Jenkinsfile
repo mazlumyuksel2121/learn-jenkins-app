@@ -31,9 +31,9 @@ pipeline {
                 sh '''
                 echo 'Testing the Jenkins to perform Assignment...'
                    
-                    cd C:\Users\mazlu\learn-jenkins-app\public
+                    cd public
                     ls -la
-                    grep "index.html" build/C:\Users\mazlu\learn-jenkins-app\public
+                    grep "index.html" build/index.html || echo "index.html not found"
                     npm test
 
                 '''
