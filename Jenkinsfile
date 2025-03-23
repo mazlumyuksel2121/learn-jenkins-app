@@ -40,7 +40,30 @@ pipeline {
                 '''
             }
         }
+                stage('E2E') {
+            agent {
+                docker {
+                    image 'mcr.microsoft.com/playwright:v1.39.0-jammy'
+                    reuseNode true
+                }
+            }
+//Once serve starts the server, it keeps running — forever — which means Jenkins can’t move to the next command.
+         //Solution: Run serve in the background using &:  
+         //Also, give it a few seconds to start up: with Sleep command
+            steps {
+                sh '''
+                    npm install serve
+                    node_modules/.bin/serve -s build &  
+            
+                    sleep 10
+                    npx playwright test
+                '''
+            }
+        }
     }
+    //Always runs after all stages — even if some fail.
+//Publishes the JUnit test report from jest-results/junit.xml
+//This is used to show test trends and results in Jenkins UI
     post {
         always {
                 junit 'test-results/junit.xml'
