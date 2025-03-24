@@ -40,6 +40,7 @@ pipeline {
                     steps {
                         sh '''
                             #test -f build/index.html
+                            echo "Testing Git Polling"
                             npm test
                         '''
                     }
