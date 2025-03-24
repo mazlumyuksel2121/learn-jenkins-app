@@ -1,8 +1,11 @@
 pipeline {
     agent any
 
+    environment {
+        NETLIFY_SITE_ID = '4adb431b-9a68-43cd-995f-ba07fd01ec16'
+    }
+
     stages {
-        
 
         stage('Build') {
             agent {
@@ -22,9 +25,8 @@ pipeline {
                 '''
             }
         }
-        
 
-        stage('Tests'){
+        stage('Tests') {
             parallel {
                 stage('Unit tests') {
                     agent {
@@ -60,7 +62,7 @@ pipeline {
                             npm install serve
                             node_modules/.bin/serve -s build &
                             sleep 10
-                            test -f build/index.html || (echo "Build not found!" && exit 1)
+                            test -f build/index.html || (echo "Build not found!" && exit 1)                            
                             npx playwright test  --reporter=html
                         '''
                     }
@@ -70,12 +72,24 @@ pipeline {
                             publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'playwright-report', reportFiles: 'index.html', reportName: 'Playwright HTML Report', reportTitles: '', useWrapperFileDirectly: true])
                         }
                     }
-                }                
+                }
             }
-        } 
-             
+        }
 
-            
-        
+        stage('Deploy') {
+            agent {
+                docker {
+                    image 'node:18-alpine'
+                    reuseNode true
+                }
+            }
+            steps {
+                sh '''
+                    npm install netlify-cli
+                    node_modules/.bin/netlify --version
+                    echo "Deploying to production. Site ID: $NETLIFY_SITE_ID"
+                '''
+            }
+        }
     }
 }
