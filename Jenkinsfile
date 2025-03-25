@@ -120,7 +120,7 @@ pipeline {
                 }
             }
             environment {
-                CI_ENVIRONMENT_URL = 'YOUR NETLIFY URL'
+                CI_ENVIRONMENT_URL = 'https://resilient-pudding-94afb2.netlify.app'
             }
              steps {
                 sh '''
