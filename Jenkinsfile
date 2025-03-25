@@ -86,6 +86,13 @@ pipeline {
             }
             steps {
                 sh '''
+                script {
+          // Run a shell command and store its output
+          def currentDate = sh(script: 'date', returnStdout: true).trim()
+          
+          // Save the output as an env variable for later stages
+          env.MY_DYNAMIC_DATE = currentDate
+        }
                     npm install netlify-cli node-jq
                     node_modules/.bin/netlify --version
                     echo "Deploying to staging. Site ID: $NETLIFY_SITE_ID"
@@ -117,6 +124,8 @@ pipeline {
                     echo "Deploying to production. Site ID: $NETLIFY_SITE_ID"
                     node_modules/.bin/netlify status
                     node_modules/.bin/netlify deploy --dir=build --prod
+                              echo "Running tests with deployment timestamp: ${MY_DYNAMIC_DATE}"
+
 
                 '''
             }
